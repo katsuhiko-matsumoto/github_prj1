@@ -1,0 +1,235 @@
+
+Python3.x対応
+初心者にもわかるように
+インストール、開発環境をはじめ各種Python構文から解説
+Windows,Mac,Linux対応
+
+IDLE(mac)
+ Applications -> Python3.x -> IDLE
+  インタラクティブシェル
+
+p13
+input
+print('what is your name?')
+my_name = input()
+print('welcome,' +my_name)
+# comment
+
+len('こんにちは');
+>>5
+
+str(-3.14)
+int('10')
+int('10.4')  #NG
+int(7.89)   #OK
+float('10.4')
+float('10')
+
+spam = input(); #文字列として認識される
+spam = int(spam); #計算式にしたい場合はパースする
+
+'spam' * 3 => 'spamspamspam' 
+
+'I have eaten ' + 99 + 'burritos.' #NG 数値は文字列連結できない
+'I have eaten ' +str(99) + 'burritos.'
+
+if...
+if name == 'alice':
+	print('hi alice')
+elif age < 12: 
+	print('you are not alice')
+
+else
+	print('else')
+
+while....
+spam = 0
+while spam < 5:
+	print('Hello World')
+	spam = spam + 1
+
+break　ループを抜ける
+continue ループの先頭に戻る
+
+for....
+for i in range(5): # 0 to 4
+	print('test'+str(i))
+
+for i in range(12,16)
+12,13,14,15
+
+for i in range(0,10,2);
+0,2,4,6,8
+
+None 値がないこと
+
+関数
+def spam():
+	print('hello')
+
+spam();
+
+スコープ
+グローバルとローカル
+関数内でグローバル変数と同一のローカル変数名を使うと、ローカルが優先
+global 変数名　でグローバルになる
+
+例外処理
+try:
+	#todo
+except ZeroDivisionError:
+	#todo
+
+p79 リスト
+spam = ['test','test2','test3']
+spam[0] # test
+spam[-1] # minus index  test3
+spam[0:2] # test test2
+
+spam = [['test','test1'],['00','11','22']]
+spam[0]
+spam[0][1]
+
+連結
+spam = spma + ['1','2','3']
+
+in
+'howdy' in ['hello', 'howdy', 'hi']
+>>true
+
+spam = ['aa','bb','cc']
+'aa' in spam
+>>true
+
+複数代入
+cat = ['fat','black','loud']
+size,color,disposition = cat
+
+cat.index('fat')
+>>0
+
+cat.append('test') #末尾追加
+cat.insert(1,'chicken')
+cat.remove('test');
+cat.sort()
+
+['aa','bb','cc'] + ['11','22','33']
+>>['aa','bb','cc','11','22','33']
+['xx','yy','zz'] * 3
+>>['xx','yy','zz','xx','yy','zz','xx','yy','zz']
+
+name = 'Zophie a cat'
+new_name = name[0:7] + 'the' + name[8:12]
+print(new_name)
+>>Zophie the cat
+
+タプル型
+eggs = ('hello',22,45.5)
+イミュータブル。値を追加変更できない
+
+各変数でリスト型、他プル型変換可能
+list()
+tuple()
+
+変数を別の変数に代入：コピー
+配列を別の変数に代入：参照同じ
+
+copy
+変数名.copy()
+変数名.deepcopy() #リストのリストまでコピー
+
+辞書型
+my_cat = {'size': 'fat', 'color':'gray', 'sidposition':'loud'}
+my_cat['size'] 
+>>fat
+my_cat.keys()　キー
+my_cat.values()　値
+my_cat.items() キーと値のセット
+
+リストは値の順番まで一致しないと、リスト同士の比較は同じにならない
+辞書は要素が一致していれば順番に関係なく一致とする
+
+存在確認
+'test' in my_cat.keys()
+'test' in my_cat.values()
+
+辞書キー値取得
+my_cat.get(キー値, キー値がなかった時返す値)
+
+キー値が未登録の場合のみ辞書に登録
+my_cat.setdefault('test','test')
+
+pprintモジュールで、リスト、辞書の内容を整形表示
+
+forでキー、バリューを変数に格納
+for k, v in inentory.items():
+	//todo
+
+正規表現
+345-45662マッチ
+'\\d\\d\\d-\\d\\d\\d\\d'
+rでエスケープなし
+r'\d\d\d-\d\d\d\d'
+
+import re
+phone_num_regex = re.compile(r'\d\d\d-\d\d\d\d');
+mo = phone_num_regex.search('私の電話番号は456-3345です');
+print('電話番号が見つかりました：'+mo.group())
+
+複数グループマッチ
+re.compile(r'Batman|Tina Fey')
+両方ある場合は、最初にマッチしたもの
+
+あってもなくてもよい
+re.compile(r'Bat(wo)?man')
+
+*で０回以上マッチ
+re.compile(r'Bat(wo)*man')
+Batwowowowowoman
+
+(Ha){3}
+(HaHaHa)
+
+(Ha){3.5}
+(HaHaHa|HaHaHaHa|HaHaHaHaHa)
+
+\d+
+ひとつ以上の数字
+
+正規表現マッチ
+デフォルトでは、最も長いものにマッチ：貧欲(Greedy))マッチ
+
+findall()
+全て見つかったリストを返す
+
+[0-5] = (0|1|2|3|4|5)
+[AIUEO] = (A|I|U|E|O)
+
+[^AIUEO]
+補集合：それ以外
+
+(r'^Hello')
+先頭マッチ
+
+(r'\d$')
+後方マッチ
+
+.
+ワイルドカード文字
+
+.*
+あらゆる文字：* 0回以上の繰り返し
+
+.*? 非貧欲サーチ
+
+re.compile('.*',re.DOTALL)
+ドットと改行を含めたマッチ
+
+re.compile(r'test', re.I)
+大文字小文字を無視したマッチ
+
+names_regex = re.compiler(r'Agent \w+')
+names_regex.sub('CENSORED', 'Anget alice gave the secret documents to Agent Bob.')
+>>CENSORED gave the secret document to CENSORED.
+sub()で置換
+
