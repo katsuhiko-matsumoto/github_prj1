@@ -1,0 +1,221 @@
+ver1...
+create table testtbl_a(
+  tokusaikicode char(6) not null,
+  tokusakimei nchar(10), 
+  zyusuyo nchar(20) default "none",
+  denwabangou char(15) unique,
+  tantusyacode char(3),
+  sisan integer check(sisan >= 100), ###check
+  primary key (tansouyacode)
+);
+
+ver2...
+create table testtbl_a(
+  tokusaikicode char(6) primary key,#########
+  tokusakimei nchar(10),
+  zyusuyo nchar(20) default "none",
+  denwabangou char(15)
+  tantusyacode char(3),
+  sisan integer check(sisan >= 100), 
+  unique(denwabangou) ##########
+);
+
+ver3...
+create table testtbl_a(
+  tokusaikicode char(6) primary key,
+  tokusakimei nchar(10),
+  zyusuyo nchar(20) default "none",
+  denwabangou char(15)
+  tantusyacode char(3),
+  sisan integer,
+  unique(denwabangou),
+  check(sisan >= 100) ########
+);
+
+##option
+seiyakumei no huyo...
+create table testtbl_a(
+  tantousyacode char(6) constraint zyutyuuPK primary key,
+  .....
+  ...
+);
+
+seiyakumei no huyo 2 ...
+create table testtbl_a(
+  tantousyacode char(6),
+  .....
+  ...,
+  constraint zyutyuuPK primary key(tantousyacode),
+);
+####end 1
+
+create table testsbl_B(
+  zyutyuubangou char(5) not null,
+  zyutyuubi char(8) not null,
+  tokusaikicode char(6),
+  foreign key(tokuisakicode) references tsstbl_a(tokuisakicode) on delete set null, ###foreign ...
+  primary key(zyutyuuabgou)
+);
+
+primary key=null ng ,unique=null ok 
+
+create view tokusaikiview
+as select tokusaikicode, tokusaikimei from tokuisaki_a
+where zyuusyo like "%tokyo"
+with check option  [<- where no zyoukenigai sounyuu kinsi]
+
+
+create role test
+grant select, update on tokusaiki_a to test ##on table-name to role-name
+grant test to user1,user2
+
+drop table test##drop
+drop view test##drop
+drop role test##drop
+
+grant all privileges on tokuisaki_a to user1,user2 ##privilages
+grant select, update(denwabangou) on tokuisaki_a to public ## to public
+revoke select, update(denwabangou) on tokuisaki_a from public## from public
+
+alter talbe zyugyouin add seinengappi Date;
+alter table zyugyouin drop column seinengappi;
+
+--
+declare CR1 cursor for
+select tokuisakicode,tokusaikimei,zyuusyo
+from testtbl
+where tokuisakicode between 1 and 100
+for update of tokuisakimei;
+
+open CR1;
+
+fetch CR1 into :tokuisakicode,:tokusakimei, :zyuusyo;
+
+update testtbl 
+set tokuisakimei='A'  [update of de siteisita retu nomi]
+where current of CR1;
+
+delete from testtbl
+where current of CR1;
+
+close CR1;
+--
+
+create domain nenrei
+ as smallint check(nenrei netween  7 and 18)
+
+--
+create assertion zyutyuubi check
+check(not exists(select * from testtbl_a a,testtbl_b b
+where a.tantousyacode=b.tantousyacode and zyutyuubi between '2018/08/01' and '2018/08/31'))
+
+--
+select x.zyutyuubangou, x.zyutyuubim, y.tokuisakimei 
+from zyutyuu_a x, tokusaki_a y
+where x.tokusaikicode = y.tokuisakicode # x.y column too
+
+select distinct tanka from shouhin_A
+
+select tokuisakicode from zyuryuu_a  # select tokuisakicode
+union 
+select tokuisakicode from tokuisaki_A
+
+select tokuisakicode from zyutyuu_a 
+union all 
+select tokuisakicode from tokuisaki_a
+
+select * 
+from zyutyuu_a
+where zyutyuubi between '20040704' and '20030706';
+
+select *
+from zyutyuu_a
+where zyutyuubi in (20030704,20030706);
+
+select * 
+from zyutyuu_a
+where zyutyuubi not in (20030704);
+
+****notice *** match column name
+where [zyutyuubi] not in (select [zyutyuubi] from zyutyuu_a where ....)
+
+
+select zyutuubangou, sum(suuryou) as gokei ###as gokei   avg(suuryou), max(suuryou), min(suuryou), count(*)
+from zyutyuumeisai_A
+group by zyutyuubangou
+
+select zyutyuubangou , sum(suuryou) as gokei
+from zyutyuumeisai_A
+group by zyutyuubangou
+having count(*) >= 3
+
+select zyutyuubangou, sym(suuryou) as gokei
+from zyutyuumeisai_a
+group by zyutyuubangou
+having count(*) >= 3
+order by zyutyuubangou desc #### order by zyutyuubangou desc
+
+...order by 2 asc
+
+select zyutyuubangou, zyutyubi,coalesce(tokusaikicode, 0) as tokuisakicode
+from zyutyuu_A;
+
+select zyutyuubangou, sum(case when suuryou <= 100 then 0 else 1 end) as binary
+from zyutyuumeisai_a;
+group by zyutyuubangou;
+
+
+select x.zyutyuubangou, x.zyutyuubi, y.tokusakimei ### x y
+from zyutyuu_a x, tokuisaki_a y
+where x.tokuisakimei = y.tokuisakimei;
+
+select x.zyutyuubangou, x.xzyutyuubi, y.tokusakimei, y.gyou, z.syouhincode,z.suuryou
+from zytyuu_a x, tokuiskai_a y, zyutyuumeisai z
+where x.tokuisakicode = y.tokusaikicode
+and x.zyutuubangou = z.zyutyuubangou
+
+select x.zyutyuubangou, x.zyutyuubi, y.tokusakimei
+from zyutyuu_a  x inner join tokusiaki_a y
+on x.tokuisakicode = y.tokuisakicode ## on
+
+select x.zyutyuubangou, x.zyutyuubi, y.tokusaikimei
+from zyutyuu_a x inner join tokusiaki_a y
+using(tokuisakicode);
+
+
+select x.zyuutyuubangou, x.zyutyuubi, y.tokuisakimei
+from zyutyuu_a x left outer join tokuisaki_a y
+on x.tokuisakicode = y.tokuisakicode
+
+select x.zyutyuunagou, x.zyutyuubi, y.yokuisakimei
+from zyutyuu_a x right outer join tokuiskai_a y
+on x.tokuisakicode = y.tokuisakicode
+
+select * from zyutyuu_a
+natural left join tokuisaki_a ### natural
+
+select * from zyutyuu_a
+natural right join tokuiskai_a
+
+from zyutyuu_a x full outer join tokuisaki_a y
+...
+
+select * from table_a ###
+left outer join table_b on ... ###
+left outer join table c on ... ###
+
+select zyutyuubangou, zyutyuubi from zyutyuu_a
+where tokuisakicode in(select tokuisakicode from tokuisaki_a wheree tantousyacode="101");
+
+select x.zyutyuubangou, x.zyutyubi ###
+from zyutyuu_a x
+where exists(select * from tokuisaki_a y
+where y.tanousyacode = "101"
+and x.tokuisakicode = y.tokuisakicode);
+
+insert into test(a,b) values("1","2");  ### table and values
+update test set a="1", b="2"  where b="0"; ### set no ()
+delete from test where a = "1";  ### delete from
+
+union:+
+except:-
