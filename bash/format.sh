@@ -111,6 +111,12 @@ do
   esac
 done
 
+***********************
+
+test1(){
+    local WOW=1 #ローカル変数
+}
+}
 ↑
 一定間隔で実行 **************
 while true; do echo "hello"; sleep 1; done
@@ -165,6 +171,9 @@ exit 1
 
 [ $? -ne 0 ] && exit 1
 
+[ $? -ne 0 ] && return 1
+#関数の中でエラー時よびだす。戻り値が1になる $? = 1:失敗通知
+
 外部シェル読み込み*************
 
 . /hoge/common.sh
@@ -201,6 +210,48 @@ echo "----- $1 -----" shift
 ← 1番目の引数の値を表示する ← 引数を1つシフトする
 done
 
+grep**************
+
+grep -c "検索文字列" ファイル名
+出現文字数カウント
+
+find**************
+
+find ディレクトリ -name 文字列
+
+最近更新されたファイル
+find dir -type f -mmin -分
+
+ディレクトリファイル数
+find dir -type f | wc -l
+
+一定ファイルサイズを超えるファイル表示
+
+find dir -size 20 -type f
+
+ファイル更新日********
+
+ls -l ファイル名 | sed 's/ *//g' | cut -d'' -f6
+
+ファイル更新日更新****
+
+touch file
+
+ファイル情報*****
+
+wc -c file　　バイト数
+wc -l file　　行数
+wc -w file   単語数
+
+空ファイル削除***
+
+find dir -size 0 -ok rm {} \;
+
+ロードアベレージ一定以上***
+
+uptime | cut -d',' -f 5 | sed 's/ *//'
+
+
 ****************************************
 technic
 
@@ -235,4 +286,42 @@ runconfirm(){
   
   return 0
 }  
+
+#日付判定
+date -d "$変数"
+if [ $? eq 0 ]; then
+    #todo
+fi
+
+#アルファベット判定
+read ANSWER
+CHKSTR = `echo $ANSWER | sed -e 's/[a-zA-Z][a-zA-Z]*//'`
+if [ -z $CHKSTR ]; then
+  echo "is alpha"
+fi
+
+#数値判定
+expr "$ANSWER + 1" > /dev/null 2>&1
+if [ $? -le 1 ]; then
+    echo "is num"
+fi
+
+#yes no 選択
+
+while read ANSW; do
+  case "$ANSW" in
+    Y|y|[Yy][Ee][Ss]) echo "yes"; break;;
+    N|n|[Nn][Oo]) echo "no"; break;;
+  esac
+done
+
+#ファイル内容を一語づつよみこむ
+
+for word in $(car filename)
+do
+  echo $ word
+done 
+
+#行番号指定して削除
+sed -d "行番号d" ファイル
 
