@@ -1,0 +1,15 @@
+{
+	"lang":"ja",
+	"mode":"dev",
+    "port" : 8888,
+    "site":"dev.goldeneyes007.orz.hm",
+    "cookiedomain":"goldeneyes007.orz.hm",
+	"unity":"3dgame.unity3d",
+	"serial":0,
+	"failover":false,
+	"workerid":0,
+	"redis":{
+		"host":"192.168.0.7",
+		"port":6379
+	}
+}
