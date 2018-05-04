@@ -1,0 +1,33 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+	var socket;
+	function prepare(){
+		socket = io.connect('ws://127.0.0.1');
+
+		socket.on('message', function(message) {
+			
+		});
+		socket.on('error', function(message) {
+			alert('connection failed:error');
+		});
+		socket.on('connect_error', function(){
+			alert('connection failed:connect_error');
+		});
+		socket.on('connect_failed', function(){
+			alert('connection failed:connect_failed');
+		});
+	
+	};
+	
+	function socketemit(method, data){
+		socket.emit(method, JSON.parse(data));
+	}
+	
+	function socketclose(){
+		socket.disconnect();
+	}
+	
+	function trim(arg) {
+		return arg.replace(/^\s+|\s+$/g, "");
+    }
+</script>

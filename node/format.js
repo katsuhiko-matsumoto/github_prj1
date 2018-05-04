@@ -108,5 +108,17 @@ fs.readFile('/Users/johnanderton/git/github_prj1/node/config.json', 'utf-8', fun
         console.log("redis host:"+self.redis.host);
 });
 
+///// after
+
+var after = function(callback) {
+	if (this.complete) {
+		//console.log("## callbacked #######");
+		callback();
+	} else {
+		//console.log("## add #######");
+		this.queue.push(callback); ///todo
+	}
+};
+
 
 
