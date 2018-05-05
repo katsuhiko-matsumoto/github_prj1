@@ -123,5 +123,19 @@ var after = function(callback) {
 	}
 };
 
+/////call back
+var test1 = wow("wow");
+console.log(test1);
 
+var test2 = wow("hello", function(){
+ console.log("hello2");
+});
+console.log(test2);
+
+function wow(test,callback){
+ if(typeof(callback) === 'function'){
+   callback("test");
+ } 
+ return 0+test;
+}
 
