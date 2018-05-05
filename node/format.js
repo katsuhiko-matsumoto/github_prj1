@@ -36,6 +36,9 @@ if(data.hoge){
     console.log("hoge not exists");
 }
 
+//#オブジェクト型なら後から動的に追加できる
+data.test = "test";
+
 res = json.jsonParse(data);
 console.log(data);
 
