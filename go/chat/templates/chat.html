@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <title>チャット</title>
+  </head>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <style>
+  	ui#messages {list-style: none;}
+  	ui#messages li {margin-bottom: 2px;}
+  	ui#messages li img {margin-right: 10px;}
+  	input {display: block;}
+  	ul {list-style: none;}
+  </style>
+  <body>
+  	<div class="container">
+    	<div class="panel panel-default">
+    		<div class="panel-dody">
+    			<ul id="messages"></ul>
+    		</div>
+    	</div>
+	    <form id="chatbox" role="form">
+	    	<div class="form-froup">
+	    		<lebel for="message">{{.UserData.name}}からメッセージを送信</lebel>
+		    	または　<a href="/logout">サインアウト</a>
+		     	<textarea id="message" class="form-control"></textarea>
+	      	</div>
+	     	<input type="submit" value="送信" class="btn btn-default" />
+	    </form>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
+    </script>
+    <script>
+    	$(function(){
+    		var socket = null;
+    		var msgBox = $("#chatbox textarea");
+    		var message = $("#messages");
+    		$("#chatbox").submit(function(){
+    			if(!msgBox.val()) return false;
+    			if(!socket){
+    				alert("error: WebSocket is not connected.")
+    				return false;
+    			}
+    			socket.send(JSON.stringify({"Message":msgBox.val()}));
+    			msgBox.val("");
+    			return false;
+    		});
+    		if(!window["WebSocket"]){
+    			alert("error: not supported browser")
+    		}else{
+    			//alert("socket browser")
+    			socket = new WebSocket("ws://{{.Host}}/room");
+    			//alert("new")
+    			socket.onclose = function(){
+    				alert("end connection.");
+    			}
+    			socket.onmessage = function(e){
+    				var msg = eval("("+e.data+")")
+    				message.append(
+    					$("<li>").append(
+    						$("<img>").attr("title", msg.Name).css({
+    							width:50,
+    							varticalAligh:"middle"
+    						}).attr("src",msg.AvatarURL),
+    						$("<span>").text(msg.Message+" ("+msg.When+")")
+    					)
+    				);
+    				//alert("wow");
+    			}
+    		}
+    	})
+    </script>
+  </body>
+</html>
