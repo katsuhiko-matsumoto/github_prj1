@@ -99,6 +99,7 @@
 		    //////////////////////////////////////
 		    //service game
 		    app.get('/worldchat', function(req, res){
+		    	res.setHeader('Access-Control-Allow-Origin', '*');
 		        res.setHeader('Connection', 'close');
 		        webController.worldchattop(req, res);
 		    });
